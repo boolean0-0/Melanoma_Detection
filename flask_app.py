@@ -22,32 +22,10 @@ with open('models/SGD.pkl', 'rb') as f:
 with open('models/pca_file.pkl', 'rb') as f:
     models['PCA'] = pickle.load(file=f)
 
-
-def require_api_key(f):
-    def wrapper(*args, **kwargs):
-        # Get the API key from the Authorization header
-        api_key = request.headers.get('Authorization')
-        
-        # Check if the API key exists in the list of valid keys
-        if api_key is None or api_key not in [f"Bearer {key}" for key in keys]:
-            return jsonify({"error": "Unauthorized"}), 403
-        
-        return f(*args, **kwargs)
-    return wrapper
-
 @app.route('/')
 def home():
-    return render_template('index.html')
-
-@app.route('/about')
-def about():
-    return render_template('about.html')
-
-@app.route('/contact')
-def test():
-    return render_template("contact.html")
-
-
+    return 'API'
+    
 # Endpoint for making predictions
 @app.route('/upload', methods=["POST", "GET"])
 def predict():
@@ -80,8 +58,7 @@ def predict():
             return jsonify({
                 'prediction': str(models[str(selected_model)].predict(uploaded_image_cnn))
             })
-
-    return render_template('upload.html')
+    return 'error'
 
 
 if __name__ == '__main__':
